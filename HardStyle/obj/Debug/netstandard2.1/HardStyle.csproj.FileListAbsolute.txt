@@ -8,3 +8,14 @@ C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\bin\Debug\netstand
 C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\bin\Debug\netstandard2.1\HardStyle.pdb
 C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\obj\Debug\netstandard2.1\HardStyle.dll
 C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\obj\Debug\netstandard2.1\HardStyle.pdb
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\bin\Debug\netstandard2.1\HardStyle.dll
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\bin\Debug\netstandard2.1\HardStyle.pdb
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.csproj.AssemblyReference.cache
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\MyPluginInfo.cs
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.AssemblyInfoInputs.cache
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.AssemblyInfo.cs
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.csproj.CoreCompileInputs.cache
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.sourcelink.json
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.dll
+C:\Users\Ali_K\OneDrive\Documents\ULTRAKILL Modding\HardStyle\HardStyle\obj\Debug\netstandard2.1\HardStyle.pdb

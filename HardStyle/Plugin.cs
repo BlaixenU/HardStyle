@@ -82,7 +82,7 @@ public class HealingPatches
     }
 
 
-    private static readonly float healStep = 0.4f / 7;
+    private static readonly float healStep = 0.2f / 6;
     private static readonly List<float> healMultipliers = [
         0.1f, // DESTRUCTIVE
         0.1f + healStep,
@@ -90,8 +90,8 @@ public class HealingPatches
         0.1f + (3 * healStep),
         0.1f + (4 * healStep),
         0.1f + (5 * healStep),
-        0.5f,
-        1, // ULTRAKILL
+        0.3f,
+        0.75f, // ULTRAKILL
     ];
 
     [HarmonyPrefix]
