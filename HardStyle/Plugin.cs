@@ -69,19 +69,6 @@ public class HardDamagePatches
 [HarmonyPatch]
 public class HealingPatches
 {
-    enum Styles
-    {
-        destructive, // also the style rank index out of combat
-        crazy,
-        brutal,
-        annihilation,
-        supreme,
-        ssadistic,
-        ssshitstorm,
-        ultrakill
-    }
-
-
     private static readonly float healStep = 0.2f / 6;
     private static readonly List<float> healMultipliers = [
         0.1f, // DESTRUCTIVE
