@@ -78,7 +78,7 @@ public class HealingPatches
         0.1f + (4 * healStep),
         0.1f + (5 * healStep),
         0.3f,
-        0.75f, // ULTRAKILL
+        1f, // ULTRAKILL
     ];
 
     [HarmonyPrefix]
