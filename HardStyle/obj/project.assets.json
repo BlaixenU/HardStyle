@@ -47,6 +47,20 @@
           }
         }
       },
+      "Krafs.Publicizer/2.3.0": {
+        "type": "package",
+        "contentFiles": {
+          "contentfiles/cs/any/Publicizer/IgnoresAccessChecksToAttribute.cs": {
+            "buildAction": "Compile",
+            "codeLanguage": "cs",
+            "copyToOutput": false
+          }
+        },
+        "build": {
+          "build/Krafs.Publicizer.props": {},
+          "build/Krafs.Publicizer.targets": {}
+        }
+      },
       "Lib.Harmony/2.3.6": {
         "type": "package",
         "dependencies": {
@@ -571,6 +585,27 @@
           "build/UltraModding.PluginInfoGenerator.targets": {}
         }
       },
+      "Unity3D.UnityEngine/2018.3.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/UnityEngine.dll": {}
+        },
+        "runtime": {
+          "lib/UnityEngine.dll": {}
+        }
+      },
+      "Unity3D.UnityEngine.UI/2018.3.5.1": {
+        "type": "package",
+        "dependencies": {
+          "Unity3D.UnityEngine": "[2018.3.5.1]"
+        },
+        "compile": {
+          "lib/UnityEngine.UI.dll": {}
+        },
+        "runtime": {
+          "lib/UnityEngine.UI.dll": {}
+        }
+      },
       "UnityEngine.Modules/2022.3.28": {
         "type": "package",
         "compile": {
@@ -709,6 +744,24 @@
         "lib/netstandard2.0/0Harmony.dll",
         "lib/netstandard2.0/0Harmony.xml",
         "logo_mini.png"
+      ]
+    },
+    "Krafs.Publicizer/2.3.0": {
+      "sha512": "DjktTgctwxUMhMkWKrRECer3LR1lHzanCOlE4mpinAiY8SfWJq4DG/QitP5h1A+WBjyWHzQSOG+204i3VpO1FA==",
+      "type": "package",
+      "path": "krafs.publicizer/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "build/Krafs.Publicizer.props",
+        "build/Krafs.Publicizer.targets",
+        "build/net472/Publicizer.dll",
+        "build/net472/dnlib.dll",
+        "contentfiles/cs/any/Publicizer/IgnoresAccessChecksToAttribute.cs",
+        "icon.png",
+        "krafs.publicizer.2.3.0.nupkg.sha512",
+        "krafs.publicizer.nuspec"
       ]
     },
     "Lib.Harmony/2.3.6": {
@@ -2555,6 +2608,32 @@
         "ultramodding.plugininfogenerator.nuspec"
       ]
     },
+    "Unity3D.UnityEngine/2018.3.5.1": {
+      "sha512": "63ZCYwGdoBCmsJCUI6dodSY+1TrU/7lTDmfF+492Z6nn8my30E3sb5HXLe7qm7MLvBIcKz9TCy114yu5VGycKA==",
+      "type": "package",
+      "path": "unity3d.unityengine/2018.3.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/UnityEngine.dll",
+        "lib/UnityEngine.xml",
+        "unity3d.unityengine.2018.3.5.1.nupkg.sha512",
+        "unity3d.unityengine.nuspec"
+      ]
+    },
+    "Unity3D.UnityEngine.UI/2018.3.5.1": {
+      "sha512": "8trOQSsm9mFyICzc6IDxLitAF3M/SOn39wHitHcKa4gXSfJhK5Ri51d40rrqb5UF1I6w2nIDXyWMUP/DZX7YFw==",
+      "type": "package",
+      "path": "unity3d.unityengine.ui/2018.3.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/UnityEngine.UI.dll",
+        "lib/UnityEngine.UI.xml",
+        "unity3d.unityengine.ui.2018.3.5.1.nupkg.sha512",
+        "unity3d.unityengine.ui.nuspec"
+      ]
+    },
     "UnityEngine.Modules/2022.3.28": {
       "sha512": "FMK+RzhLMkvBkHbI17CDz+zGb+z9BZNn7V8r67YBH+zob75lhaZhmzJNaSf9CdGBlPDRBx5u4ESHpPCxcJ8PHg==",
       "type": "package",
@@ -2768,8 +2847,10 @@
     ".NETStandard,Version=v2.1": [
       "BepInEx.Analyzers >= 1.*",
       "BepInEx.Core >= 5.*",
+      "Krafs.Publicizer >= 2.3.0",
       "Lib.Harmony >= 2.3.6",
       "UltraModding.PluginInfoGenerator >= 4.0.0",
+      "Unity3D.UnityEngine.UI >= 2018.3.5.1",
       "UnityEngine.Modules >= 2022.3.28"
     ]
   },
@@ -2834,6 +2915,12 @@
             "target": "Package",
             "version": "[5.*, )"
           },
+          "Krafs.Publicizer": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[2.3.0, )"
+          },
           "Lib.Harmony": {
             "target": "Package",
             "version": "[2.3.6, )"
@@ -2841,6 +2928,10 @@
           "UltraModding.PluginInfoGenerator": {
             "target": "Package",
             "version": "[4.0.0, )"
+          },
+          "Unity3D.UnityEngine.UI": {
+            "target": "Package",
+            "version": "[2018.3.5.1, )"
           },
           "UnityEngine.Modules": {
             "include": "Compile",
@@ -2867,5 +2958,27 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Unity3D.UnityEngine 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Unity3D.UnityEngine",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Unity3D.UnityEngine.UI 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Unity3D.UnityEngine.UI",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.1"
+      ]
+    }
+  ]
 }

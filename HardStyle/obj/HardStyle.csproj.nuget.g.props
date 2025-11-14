@@ -13,6 +13,19 @@
     <SourceRoot Include="C:\Users\Ali_K\.nuget\packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(Language)' == 'C#' AND '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Compile Include="$(NuGetPackageRoot)krafs.publicizer\2.3.0\contentfiles\cs\any\Publicizer\IgnoresAccessChecksToAttribute.cs" Condition="Exists('$(NuGetPackageRoot)krafs.publicizer\2.3.0\contentfiles\cs\any\Publicizer\IgnoresAccessChecksToAttribute.cs')">
+      <NuGetPackageId>Krafs.Publicizer</NuGetPackageId>
+      <NuGetPackageVersion>2.3.0</NuGetPackageVersion>
+      <NuGetItemType>Compile</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>Publicizer\IgnoresAccessChecksToAttribute.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)krafs.publicizer\2.3.0\build\Krafs.Publicizer.props" Condition="Exists('$(NuGetPackageRoot)krafs.publicizer\2.3.0\build\Krafs.Publicizer.props')" />
+  </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgBepInEx_Core Condition=" '$(PkgBepInEx_Core)' == '' ">C:\Users\Ali_K\.nuget\packages\bepinex.core\5.4.21</PkgBepInEx_Core>
     <PkgBepInEx_Analyzers Condition=" '$(PkgBepInEx_Analyzers)' == '' ">C:\Users\Ali_K\.nuget\packages\bepinex.analyzers\1.0.8</PkgBepInEx_Analyzers>

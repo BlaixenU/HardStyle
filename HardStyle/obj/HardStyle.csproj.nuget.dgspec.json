@@ -61,6 +61,12 @@
               "target": "Package",
               "version": "[5.*, )"
             },
+            "Krafs.Publicizer": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Lib.Harmony": {
               "target": "Package",
               "version": "[2.3.6, )"
@@ -68,6 +74,10 @@
             "UltraModding.PluginInfoGenerator": {
               "target": "Package",
               "version": "[4.0.0, )"
+            },
+            "Unity3D.UnityEngine.UI": {
+              "target": "Package",
+              "version": "[2018.3.5.1, )"
             },
             "UnityEngine.Modules": {
               "include": "Compile",

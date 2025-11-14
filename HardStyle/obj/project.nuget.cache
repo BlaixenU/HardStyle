@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Xz3z9iX8JiI=",
+  "dgSpecHash": "uhR/EekM7VI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\Ali_K\\.nuget\\packages\\bepinex.baselib\\5.4.20\\bepinex.baselib.5.4.20.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\bepinex.core\\5.4.21\\bepinex.core.5.4.21.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\harmonyx\\2.7.0\\harmonyx.2.7.0.nupkg.sha512",
+    "C:\\Users\\Ali_K\\.nuget\\packages\\krafs.publicizer\\2.3.0\\krafs.publicizer.2.3.0.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\lib.harmony\\2.3.6\\lib.harmony.2.3.6.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\lib.harmony.ref\\2.3.6\\lib.harmony.ref.2.3.6.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
@@ -43,7 +44,30 @@
     "C:\\Users\\Ali_K\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\ultramodding.plugininfogenerator\\4.0.0\\ultramodding.plugininfogenerator.4.0.0.nupkg.sha512",
+    "C:\\Users\\Ali_K\\.nuget\\packages\\unity3d.unityengine\\2018.3.5.1\\unity3d.unityengine.2018.3.5.1.nupkg.sha512",
+    "C:\\Users\\Ali_K\\.nuget\\packages\\unity3d.unityengine.ui\\2018.3.5.1\\unity3d.unityengine.ui.2018.3.5.1.nupkg.sha512",
     "C:\\Users\\Ali_K\\.nuget\\packages\\unityengine.modules\\2022.3.28\\unityengine.modules.2022.3.28.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Unity3D.UnityEngine 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Unity3D.UnityEngine",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Unity3D.UnityEngine.UI 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Unity3D.UnityEngine.UI",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.1"
+      ]
+    }
+  ]
 }
