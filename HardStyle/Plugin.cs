@@ -19,8 +19,15 @@ using ULTRAKILL.Cheats;
 
 namespace HardStyle;
 
+internal static class PluginInfo
+{
+    public const string PLUGIN_GUID = "com.blaixenu.hardstyle";
+    public const string PLUGIN_NAME = "HardStyle";
+    public const string PLUGIN_VERSION = "1.2.2";
+}
+
 [HarmonyPatch]
-[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
     internal static new ManualLogSource Logger { get; private set; } = null!;
@@ -30,7 +37,7 @@ public class Plugin : BaseUnityPlugin
 
         // Plugin startup logic
         Logger = base.Logger;
-        Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} loaded! Yippee!!!");
+        Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} loaded! Yippee!!!");
         gameObject.hideFlags = HideFlags.DontSaveInEditor;
 
         DoPatching();
@@ -39,11 +46,10 @@ public class Plugin : BaseUnityPlugin
 
     private static void DoPatching()
     {
-        var harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-        harmony.PatchAll();
+        new Harmony(PluginInfo.PLUGIN_GUID).PatchAll();
     }
 
-    [HarmonyPostfix, HarmonyPatch(typeof(GameStateManager), nameof(GameStateManager.CanSubmitScores), MethodType.Getter)]
+    [HarmonyPostfix, HarmonyPatch(typeof(LeaderboardController), nameof(LeaderboardController.CanSubmitScores), MethodType.Getter)]
     private static void ScoresSubmission(ref bool __result)
     {
         // prevent scores from being submitted since this mod is technically a cheat
@@ -67,16 +73,19 @@ public class Debug
 
     public static bool DEBUG_MODE = false;
 
-    [HarmonyPrefix, HarmonyPatch(typeof(BloodsplatterManager), nameof(BloodsplatterManager.GetGore))]
-    [HarmonyPatch([ typeof(GoreType),
-                    typeof(bool),
-                    typeof(bool),
-                    typeof(bool),
-                    typeof(EnemyIdentifier),
-                    typeof(bool) ])]
+    [HarmonyPrefix, HarmonyPatch(typeof(BloodsplatterManager), nameof(BloodsplatterManager.GetGore), 
+                                 [ typeof(GoreType),
+                                   typeof(bool),
+                                   typeof(bool),
+                                   typeof(bool),
+                                   typeof(EnemyIdentifier),
+                                   typeof(bool) ])]
     private static void GetGoreDebugger(ref EnemyIdentifier eid)
     {
-
+        if (!DEBUG_MODE) 
+        {
+            return;
+        }
 
         Plugin.Logger.LogInfo("BloodsplatterManager.GetGore() called.");
         if (eid != null)
@@ -147,28 +156,28 @@ public class HealingPatches
                                                     1f, // ULTRAKILL
                                                 ];
 
-    private static float HealFactor
-    {
-        get
+    private static float HealFactor => healMultipliers[StyleHUD.Instance.rankIndex];
+    
+    [HarmonyPrefix, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.GetHealth))]
+    private static void GetHealthPatch(ref int health)
         {
-            return healMultipliers[StyleHUD.Instance.rankIndex];
+
+            StyleHUD styleHud = StyleHUD.Instance;
+
+            var currentHealMultiplier = healMultipliers[styleHud.rankIndex];
+            var finalHealth = Mathf.RoundToInt(health * currentHealMultiplier);
+
+            if (Debug.DEBUG_MODE)
+            {
+                Plugin.Logger.LogInfo($"* GetHealth() called!");
+                Plugin.Logger.LogInfo($"    Input {health}  output {finalHealth}");
+                Plugin.Logger.LogInfo($"    Rank index {styleHud.rankIndex}  Multiplier {currentHealMultiplier}");
+                Plugin.Logger.LogInfo("\n");
+                return;
+            }
+
+            health = finalHealth;
         }
-    }
-    /*    [HarmonyPrefix, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.GetHealth))]
-       private static void GetHealthPatch(ref int health)
-       {
-           StyleHUD styleHud = StyleHUD.Instance;
-
-           var currentHealMultiplier = healMultipliers[styleHud.rankIndex];
-           var finalHealth = Mathf.RoundToInt(health * currentHealMultiplier);
-
-           Plugin.Logger.LogInfo($"* GetHealth() called!");
-           Plugin.Logger.LogInfo($"    Input {health}  output {finalHealth}");
-           Plugin.Logger.LogInfo($"    Rank index {styleHud.rankIndex}  Multiplier {currentHealMultiplier}");
-           Plugin.Logger.LogInfo("\n");
-
-           health = finalHealth;
-       } */
 
     /* [HarmonyPrefix, HarmonyPatch(typeof(BloodsplatterManager), nameof(BloodsplatterManager.PrepareGore))]
     private static bool ThisShouldBeATranspilerButIsnt(ref GameObject gob, ref int healthChange, ref EnemyIdentifier eid, ref bool fromExplosion)
@@ -222,26 +231,22 @@ public class HealingPatches
 
         UnityEngine.Object? obj = UnityEngine.Object.FindObjectFromInstanceID(__instance.eidID);
 
-        if (obj == null)
+        if (Debug.DEBUG_MODE)
         {
-            if (!Debug.DEBUG_MODE)
+            if (obj == null)
             {
+                if (obj is null)
+                {
+                    Plugin.Logger.LogInfo("Bloodsplatter.eid is null.");
+                }
+                else
+                {
+                    Plugin.Logger.LogInfo("Bloodsplatter.eid is destroyed.");
+                }
                 return;
             }
-            if (obj is null)
-            {
-                Plugin.Logger.LogInfo("Bloodsplatter.eid is null.");
-            }
             else
-            {
-                Plugin.Logger.LogInfo("Bloodsplatter.eid is destroyed.");
-            }
-            return;
-        }
-        else
-        {  
-            if (Debug.DEBUG_MODE)
-            {
+            {  
                 Plugin.Logger.LogInfo($"Bloodsplatter.eid object name: {obj.name}");
             }
         }
@@ -261,8 +266,10 @@ public class HealingPatches
                 break;
         }
         
+        if (Debug.DEBUG_MODE) 
+        {
             Plugin.Logger.LogInfo($"Enemy hit, EnemyIdentifier found ({targetEid}), emit blood for {__instance.hpAmount} HP");
-
+        }
     }
     
     
@@ -378,162 +385,159 @@ public class MiscPatches
                                    ref float multiplier,
                                    ref GameObject sourceWeapon)
     {
-        BloodsplatterManager bsm = BloodsplatterManager.Instance;
+        var s = __instance;
+
 
         bool dead = false;
-        float num = __instance.health;
-        bool flag = true;
-        if (hitPoint == Vector3.zero)
-        {
-            hitPoint = target.transform.position;
-        }
-        flag = bsm.goreOn;
-        if (__instance.eid == null)
-        {
-            __instance.eid = __instance.GetComponent<EnemyIdentifier>();
-        }
-        if (__instance.eid.hitter != "fire")
-        {
-            GameObject gameObject = bsm.GetGore(GoreType.Body, __instance.eid);
-
-            if ((bool)gameObject)
-            {
-                /* gameObject.GetComponent<Bloodsplatter>().eid = __instance.eid; */
-                gameObject.transform.position = hitPoint;
-                gameObject.transform.rotation = Quaternion.identity;
-            }
-            
-            if (!__instance.eid.sandified && !__instance.eid.blessed)
-            {
-                if ((bool)gameObject)
-                {
-                    Bloodsplatter component = gameObject.GetComponent<Bloodsplatter>();
-                    gameObject.transform.SetParent(__instance.gz.goreZone, worldPositionStays: true);
-                    if (__instance.eid.hitter == "drill")
-                    {
-                        gameObject.transform.localScale *= 2f;
-                    }
-                    if (__instance.health > 0f)
-                    {
-                        component.GetReady();
-                    }
-                    if (__instance.eid.hitter == "nail")
-                    {
-                        component.hpAmount = 3;
-                        component.GetComponent<AudioSource>().volume *= 0.8f;
-                    }
-                    else if (multiplier >= 1f)
-                    {
-                        component.hpAmount = 30;
-                    }
-                    if (flag)
-                    {
-                        gameObject.GetComponent<ParticleSystem>().Play();
-                    }
-                }
-                if (__instance.eid.hitter != "shotgun" && __instance.eid.hitter != "drill" && __instance.gameObject.activeInHierarchy)
-                {
-                    if (__instance.dripBlood != null)
-                    {
-                        __instance.currentDrip = UnityEngine.Object.Instantiate(__instance.dripBlood, hitPoint, Quaternion.identity);
-                    }
-                    if ((bool)__instance.currentDrip)
-                    {
-                        __instance.currentDrip.transform.parent = __instance.transform;
-                        __instance.currentDrip.transform.LookAt(__instance.transform);
-                        __instance.currentDrip.transform.Rotate(180f, 180f, 180f);
-                        if (flag)
-                        {
-                            __instance.currentDrip.GetComponent<ParticleSystem>().Play();
-                        }
-                    }
-                }
-            }
-        }
-        if (!__instance.eid.dead)
-        {
-            if (!__instance.eid.blessed && !InvincibleEnemies.Enabled)
-            {
-                __instance.health -= 1f * multiplier;
-            }
-            if (__instance.scalc == null)
-            {
-                __instance.scalc = MonoSingleton<StyleCalculator>.Instance;
-            }
-            if (__instance.health <= 0f)
-            {
-                dead = true;
-            }
-            if (((__instance.eid.hitter == "shotgunzone" || __instance.eid.hitter == "hammerzone") && __instance.parryable) || __instance.eid.hitter == "punch")
-            {
-                if (__instance.parryable)
-                {
-                    __instance.parryable = false;
-                    MonoSingleton<FistControl>.Instance.currentPunch.Parry(hook: false, __instance.eid);
-                    __instance.currentExplosion = UnityEngine.Object.Instantiate(__instance.beamExplosion.ToAsset(), __instance.transform.position, Quaternion.identity);
-                    if (!InvincibleEnemies.Enabled && !__instance.eid.blessed)
-                    {
-                        __instance.health -= (float)((__instance.parryFramesLeft > 0) ? 4 : 5) / __instance.eid.totalHealthModifier;
-                    }
-                    Explosion[] componentsInChildren = __instance.currentExplosion.GetComponentsInChildren<Explosion>();
-                    foreach (Explosion obj in componentsInChildren)
-                    {
-                        obj.speed *= __instance.eid.totalDamageModifier;
-                        obj.maxSize *= 1.75f * __instance.eid.totalDamageModifier;
-                        obj.damage = Mathf.RoundToInt(50f * __instance.eid.totalDamageModifier);
-                        obj.canHit = AffectedSubjects.EnemiesOnly;
-                        obj.friendlyFire = true;
-                    }
-                    if (__instance.currentEnrageEffect == null)
-                    {
-                        __instance.CancelInvoke("BeamFire");
-                        __instance.Invoke("StopWaiting", 1f);
-                        UnityEngine.Object.Destroy(__instance.currentCE);
-                    }
-                    __instance.parryFramesLeft = 0;
-                }
-                else
-                {
-                    __instance.parryFramesLeft = MonoSingleton<FistControl>.Instance.currentPunch.activeFrames;
-                }
-            }
-            if (multiplier != 0f)
-            {
-                __instance.scalc.HitCalculator(__instance.eid.hitter, "spider", "", dead, __instance.eid, sourceWeapon);
-            }
-            if (num >= __instance.maxHealth / 2f && __instance.health < __instance.maxHealth / 2f)
-            {
-                if (__instance.ensims == null || __instance.ensims.Length == 0)
-                {
-                    __instance.ensims = __instance.GetComponentsInChildren<EnemySimplifier>();
-                }
-                UnityEngine.Object.Instantiate(__instance.woundedParticle, __instance.transform.position, Quaternion.identity);
-                if (!__instance.eid.puppet)
-                {
-                    EnemySimplifier[] array = __instance.ensims;
-                    foreach (EnemySimplifier enemySimplifier in array)
-                    {
-                        if (!enemySimplifier.ignoreCustomColor)
-                        {
-                            enemySimplifier.ChangeMaterialNew(EnemySimplifier.MaterialState.normal, __instance.woundedMaterial);
-                            enemySimplifier.ChangeMaterialNew(EnemySimplifier.MaterialState.enraged, __instance.woundedEnrageMaterial);
-                        }
-                    }
-                }
-            }
-            if ((bool)__instance.hurtSound && num > 0f)
-            {
-                __instance.hurtSound.PlayClipAtPoint(MonoSingleton<AudioMixerController>.Instance.goreGroup, __instance.transform.position, 12, 1f, 0.75f, UnityEngine.Random.Range(0.85f, 1.35f));
-            }
-            if (__instance.health <= 0f && !__instance.eid.dead)
-            {
-                __instance.Die();
-            }
-        }
-        else if (__instance.eid.hitter == "ground slam")
-        {
-            __instance.BreakCorpse();
-        }
+		float num = s.health;
+		bool flag = true;
+		if (hitPoint == Vector3.zero)
+		{
+			hitPoint = target.transform.position;
+		}
+		flag = MonoSingleton<BloodsplatterManager>.Instance.goreOn;
+		if (s.eid == null)
+		{
+			s.eid = s.GetComponent<EnemyIdentifier>();
+		}
+		if (s.eid.hitter != "fire")
+		{
+			if (!s.eid.sandified && !s.eid.blessed)
+			{
+				GameObject gameObject = MonoSingleton<BloodsplatterManager>.Instance.GetGore(GoreType.Body, s.eid);
+				if ((bool)gameObject)
+				{
+					Bloodsplatter component = gameObject.GetComponent<Bloodsplatter>();
+					gameObject.transform.SetParent(s.gz.goreZone, worldPositionStays: true);
+					if (s.eid.hitter == "drill")
+					{
+						gameObject.transform.localScale *= 2f;
+					}
+					if (s.health > 0f)
+					{
+						component.GetReady();
+					}
+					if (s.eid.hitter == "nail")
+					{
+						component.hpAmount = 3;
+						component.GetComponent<AudioSource>().volume *= 0.8f;
+					}
+					else if (multiplier >= 1f)
+					{
+						component.hpAmount = 30;
+					}
+					if (flag)
+					{
+						gameObject.GetComponent<ParticleSystem>().Play();
+					}
+				}
+				if (s.eid.hitter != "shotgun" && s.eid.hitter != "drill" && s.gameObject.activeInHierarchy)
+				{
+					if (s.dripBlood != null)
+					{
+						s.currentDrip = UnityEngine.Object.Instantiate(s.dripBlood, hitPoint, Quaternion.identity);
+					}
+					if ((bool)s.currentDrip)
+					{
+						s.currentDrip.transform.parent = s.transform;
+						s.currentDrip.transform.LookAt(s.transform);
+						s.currentDrip.transform.Rotate(180f, 180f, 180f);
+						if (flag)
+						{
+							s.currentDrip.GetComponent<ParticleSystem>().Play();
+						}
+					}
+				}
+			}
+			else
+			{
+				MonoSingleton<BloodsplatterManager>.Instance.GetGore(GoreType.Small, s.eid);
+			}
+		}
+		if (!s.eid.dead)
+		{
+			if (!s.eid.blessed && !InvincibleEnemies.Enabled)
+			{
+				s.health -= 1f * multiplier;
+			}
+			if (s.scalc == null)
+			{
+				s.scalc = MonoSingleton<StyleCalculator>.Instance;
+			}
+			if (s.health <= 0f)
+			{
+				dead = true;
+			}
+			if (((s.eid.hitter == "shotgunzone" || s.eid.hitter == "hammerzone") && s.parryable) || s.eid.hitter == "punch")
+			{
+				if (s.parryable)
+				{
+					s.parryable = false;
+					MonoSingleton<FistControl>.Instance.currentPunch.Parry(hook: false, s.eid);
+					s.currentExplosion = UnityEngine.Object.Instantiate(s.beamExplosion.ToAsset(), s.transform.position, Quaternion.identity);
+					if (!InvincibleEnemies.Enabled && !s.eid.blessed)
+					{
+						s.health -= (float)((s.parryFramesLeft > 0) ? 4 : 5) / s.eid.totalHealthModifier;
+					}
+					Explosion[] componentsInChildren = s.currentExplosion.GetComponentsInChildren<Explosion>();
+					foreach (Explosion obj in componentsInChildren)
+					{
+						obj.speed *= s.eid.totalDamageModifier;
+						obj.maxSize *= 1.75f * s.eid.totalDamageModifier;
+						obj.damage = Mathf.RoundToInt(50f * s.eid.totalDamageModifier);
+						obj.canHit = AffectedSubjects.EnemiesOnly;
+						obj.friendlyFire = true;
+					}
+					if (s.currentEnrageEffect == null)
+					{
+						s.CancelInvoke("BeamFire");
+						s.Invoke("StopWaiting", 1f);
+						UnityEngine.Object.Destroy(s.currentChargeEffect);
+					}
+					s.parryFramesLeft = 0;
+				}
+				else
+				{
+					s.parryFramesLeft = MonoSingleton<FistControl>.Instance.currentPunch.activeFrames;
+				}
+			}
+			if (multiplier != 0f)
+			{
+				s.scalc.HitCalculator(s.eid.hitter, "spider", "", dead, s.eid, sourceWeapon);
+			}
+			if (num >= s.maxHealth / 2f && s.health < s.maxHealth / 2f)
+			{
+				if (s.ensims == null || s.ensims.Length == 0)
+				{
+					s.ensims = s.GetComponentsInChildren<EnemySimplifier>();
+				}
+				UnityEngine.Object.Instantiate(s.woundedParticle, s.transform.position, Quaternion.identity);
+				if (!s.eid.puppet)
+				{
+					EnemySimplifier[] array = s.ensims;
+					foreach (EnemySimplifier enemySimplifier in array)
+					{
+						if (!enemySimplifier.ignoreCustomColor)
+						{
+							enemySimplifier.ChangeMaterialNew(EnemySimplifier.MaterialState.normal, s.woundedMaterial);
+							enemySimplifier.ChangeMaterialNew(EnemySimplifier.MaterialState.enraged, s.woundedEnrageMaterial);
+						}
+					}
+				}
+			}
+			if ((bool)s.hurtSound && num > 0f)
+			{
+				s.hurtSound.PlayClipAtPoint(MonoSingleton<AudioMixerController>.Instance.goreGroup, s.transform.position, 12, 1f, 0.75f, UnityEngine.Random.Range(0.85f, 1.35f));
+			}
+			if (s.health <= 0f && !s.eid.dead)
+			{
+				s.Die();
+			}
+		}
+		else if (s.eid.hitter == "ground slam")
+		{
+			s.BreakCorpse();
+		}
 
         return false;
     }

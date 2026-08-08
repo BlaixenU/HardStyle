@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uhR/EekM7VI=",
+  "dgSpecHash": "vecC8DpGcZs=",
   "success": true,
   "projectFilePath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
   "expectedPackageFiles": [
@@ -52,21 +52,25 @@
     {
       "code": "NU1701",
       "level": "Warning",
-      "warningLevel": 1,
       "message": "Package 'Unity3D.UnityEngine 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "projectPath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
       "libraryId": "Unity3D.UnityEngine",
       "targetGraphs": [
-        ".NETStandard,Version=v2.1"
+        "netstandard2.1"
       ]
     },
     {
       "code": "NU1701",
       "level": "Warning",
-      "warningLevel": 1,
       "message": "Package 'Unity3D.UnityEngine.UI 2018.3.5.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETStandard,Version=v2.1'. This package may not be fully compatible with your project.",
+      "projectPath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Ali_K\\OneDrive\\Documents\\ULTRAKILL Modding\\HardStyle\\HardStyle\\HardStyle.csproj",
       "libraryId": "Unity3D.UnityEngine.UI",
       "targetGraphs": [
-        ".NETStandard,Version=v2.1"
+        "netstandard2.1"
       ]
     }
   ]

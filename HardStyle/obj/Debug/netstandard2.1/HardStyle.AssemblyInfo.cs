@@ -212,7 +212,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HardStyle")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d942c5625d03153cc752979d6028bf89963f4098")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f7e940514b1b811858a3ac78728e519b5f81873")]
 [assembly: System.Reflection.AssemblyProductAttribute("HardStyle")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HardStyle")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
