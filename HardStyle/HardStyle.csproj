@@ -11,6 +11,7 @@
     <RootNamespace>HardStyle</RootNamespace>
     <UltrakillDir>F:/Steam/steamapps/common/ULTRAKILL - Bepinex/</UltrakillDir> <!-- Ensure that this has BepInEx installed -->
     <CopyToBepInExPluginsDir>true</CopyToBepInExPluginsDir>
+    <PublicizeAll>true</PublicizeAll>
     
     <RestoreAdditionalProjectSources>
       https://nuget.bepinex.dev/v3/index.json;
@@ -47,8 +48,4 @@
       <CopyLocal>false</CopyLocal>
     </Reference>
   </ItemGroup>
-  
-  <PropertyGroup>
-    <PublicizeAll>true</PublicizeAll>
-  </PropertyGroup>
 </Project>
