@@ -4,17 +4,21 @@ using HarmonyLib;
 namespace HardStyle.Patches;
 
 [HarmonyPatch]
-public static class StylePatches
+public static class Style
 {
     public static float timeSinceHook;
 
     public static float originalDecaySpeed;
 
-    public static float baseDecayMultiplier = 1.5f;
+    public static bool doWhiplashStyleReduction => Config.whipStyleDecayAccel.value;
 
-    public static float finalDecayMultiplier = 2;
+    public static bool doWhiplashStyleReductionEase => Config.rateIncreaseEase.value;
 
-    public static float hookTime = 1;
+    public static float baseDecayMultiplier => Config.startingDecayRate.value;
+
+    public static float finalDecayMultiplier => Config.finalDecayRate.value;
+
+    public static float hookTime => Config.easeTime.value;
 
     public static bool IsBeingPulledToEnemy
     {
@@ -27,6 +31,21 @@ public static class StylePatches
                 return true;
             }
             return false;
+        }
+    }
+
+    public static float RateMultiplier
+    {
+        get
+        {
+            float result = baseDecayMultiplier;
+
+            if (doWhiplashStyleReductionEase)
+            {
+                result += Mathf.Clamp01(timeSinceHook / hookTime) * (finalDecayMultiplier - baseDecayMultiplier);
+            }
+
+            return result;
         }
     }
 
@@ -49,9 +68,14 @@ public static class StylePatches
         __state = __instance.currentMeter;
     }
 
-    [HarmonyPrefix, HarmonyPatch(typeof(StyleHUD), nameof(StyleHUD.UpdateMeter))]
+    [HarmonyPostfix, HarmonyPatch(typeof(StyleHUD), nameof(StyleHUD.UpdateMeter))]
     public static void skababa2(ref float __state, ref StyleHUD __instance)
     {
+        if (!doWhiplashStyleReduction)
+        {
+            return;
+        }
+
         __instance.currentMeter = __state;
         
         if (!(__instance.currentMeter > 0f && !__instance.comboActive) && !(__instance.currentMeter < 0f))
@@ -60,7 +84,7 @@ public static class StylePatches
 
             if (IsBeingPulledToEnemy)
             {
-                factor = baseDecayMultiplier + (Mathf.Clamp01(timeSinceHook / hookTime) * (finalDecayMultiplier - baseDecayMultiplier));
+                factor = RateMultiplier;
             }
 
             __instance.currentMeter -= Time.deltaTime * (__instance.currentRank.drainSpeed * factor * 15f);

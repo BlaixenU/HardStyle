@@ -6,22 +6,15 @@ using HarmonyLib;
 namespace HardStyle.Patches;
 
 [HarmonyPatch]
-public static class HealingPatches
+public static class Healing
 {
-    private static float healStep = 0.2f / 6;
-    
-    private static List<float> healMultipliers = [
-                                                    0.1f, // DESTRUCTIVE
-                                                    0.1f + healStep,
-                                                    0.1f + (2 * healStep),
-                                                    0.1f + (3 * healStep),
-                                                    0.1f + (4 * healStep),
-                                                    0.1f + (5 * healStep),
-                                                    0.3f,
-                                                    1f, // ULTRAKILL
-                                                ];
+    private static float HealFactor => Config.healMults[StyleHUD.Instance.rankIndex].value;
 
-    private static float HealFactor => healMultipliers[StyleHUD.Instance.rankIndex];
+    private static bool screwdriverBypass => Config.screwBypass.value;
+
+    private static float screwdriverMultiplier => Config.screwMult.value;
+
+    private static bool roundingFix => Config.roundingFix.value;
     
     /* [HarmonyPrefix, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.GetHealth))] dont uncomment this brah.
     private static void GetHealthPatch(ref int health)
@@ -85,10 +78,10 @@ public static class HealingPatches
     } */
 
     [HarmonyPrefix, HarmonyPatch(typeof(Bloodsplatter), nameof(Bloodsplatter.Collide))]
-    private static void BloodHealPrefix(ref Bloodsplatter __instance, ref int __state)
+    private static void BloodHealPrefix(ref Bloodsplatter __instance)
     {
 
-        __state = __instance.hpAmount; // storing original hpAmount for the postfix
+        var originalHpAmount = __instance.hpAmount; // storing original hpAmount for the postfix
 
         UnityEngine.Object? obj = UnityEngine.Object.FindObjectFromInstanceID(__instance.eidID);
 
@@ -113,9 +106,10 @@ public static class HealingPatches
 
         // HEALING CONDITIONS
 
-        EnemyIdentifier? targetEid = obj as EnemyIdentifier; // ts cant be be null sybau // what is he talking about?
+        EnemyIdentifier targetEid = null!;
+        targetEid = (EnemyIdentifier)obj;
 
-        switch (targetEid?.hitter)
+        /* switch (targetEid?.hitter)
         {
             case "drill":
                 __instance.hpAmount = Mathf.RoundToInt(__instance.hpAmount * 0.5f);
@@ -123,19 +117,26 @@ public static class HealingPatches
             default:
                 __instance.hpAmount = Mathf.RoundToInt(__instance.hpAmount * HealFactor);
                 break;
-        }
+        } */
         
+        __instance.hpAmount = Mathf.RoundToInt(originalHpAmount * HealFactor);
+        if (targetEid?.hitter == "drill")
+        {
+            __instance.hpAmount = Mathf.RoundToInt(originalHpAmount * screwdriverMultiplier);
+        }
+
+
         Debug.Log($"Enemy hit, EnemyIdentifier found ({targetEid}), emit blood for {__instance.hpAmount} HP");
 
     }
     
     
-    [HarmonyPostfix, HarmonyPatch(typeof(Bloodsplatter), nameof(Bloodsplatter.Collide))]
+    /* [HarmonyPostfix, HarmonyPatch(typeof(Bloodsplatter), nameof(Bloodsplatter.Collide))]
     private static void BloodHealPostfix(ref Bloodsplatter __instance, ref int __state)
     {
-        __instance.hpAmount = __state;
+        __instance.hpAmount = __state; // what does this even do?
     }
-
+ */
 
     [HarmonyTranspiler, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.Parry))]
     private static IEnumerable<CodeInstruction> ParryPatch(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

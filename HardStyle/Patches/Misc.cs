@@ -5,7 +5,7 @@ using ULTRAKILL.Cheats;
 namespace HardStyle.Patches;
 
 [HarmonyPatch]
-public static class MiscPatches
+public static class Misc
 {
     /* [HarmonyTranspiler, HarmonyPatch(typeof(SpiderBody), nameof(SpiderBody.GetHurt))]
     private static IEnumerable<CodeInstruction> MalfaceBloodsplatterInstanceFix(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

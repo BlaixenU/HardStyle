@@ -1,4 +1,4 @@
-﻿
+﻿using System.IO;
 using BepInEx;
 using BepInEx.Logging;
 using UnityEngine;
@@ -6,13 +6,18 @@ using HarmonyLib;
 
 namespace HardStyle;
 
-[HarmonyPatch]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
+    public static string AssemblyPath => Path.GetDirectoryName(typeof(Plugin).Assembly.Location);
+
+    public static string ModDir = Path.GetFullPath(Path.Combine(AssemblyPath, @"../"));
+
     internal static new ManualLogSource Logger { get; private set; } = null!;
 
-    internal static Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+    private static Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+
+    public static Config config = new Config(MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_GUID);
 
     private void Awake()
     {
@@ -22,4 +27,5 @@ public class Plugin : BaseUnityPlugin
 
         harmony.PatchAll();
     }
+
 }

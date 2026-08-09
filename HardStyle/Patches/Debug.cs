@@ -15,7 +15,7 @@ public class Debug
     //     }
     // }
 
-    public static bool DEBUG_MODE = false;
+    public static bool DEBUG_MODE => Config.debugMode.value;
 
     [HarmonyPrefix, HarmonyPatch(typeof(BloodsplatterManager), nameof(BloodsplatterManager.GetGore), 
                                  [ typeof(GoreType),

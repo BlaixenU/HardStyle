@@ -6,7 +6,7 @@
     <PropertyGroup>
       <BepInExPluginsDir>$(UltrakillDir)BepInEx/plugins/</BepInExPluginsDir>
       <SourceDir>$(MSBuildProjectDirectory)\$(OutputPath)</SourceDir>
-      <DestinationDir>$(BepInExPluginsDir)$(AssemblyName)/</DestinationDir>
+      <DestinationDir>$(BepInExPluginsDir)$(AssemblyName)/$(AssemblyName)</DestinationDir>
     </PropertyGroup>
     <Message Importance="high" Text="MSBuildProjectDirectory = $(MSBuildProjectDirectory)" />
     <Message Importance="high" Text="OutputPath = $(OutputPath)" />
