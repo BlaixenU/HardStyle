@@ -26,15 +26,19 @@ public class Debug
                                    typeof(bool) ])]
     private static void GetGoreDebugger(ref EnemyIdentifier eid)
     {
-        if (!DEBUG_MODE) 
-        {
-            return;
-        }
 
-        Plugin.Logger.LogInfo("BloodsplatterManager.GetGore() called.");
+        Log("BloodsplatterManager.GetGore() called.");
         if (eid != null)
         {
-            Plugin.Logger.LogInfo($"EnemyIdentifier value non-null, value: {eid}");
+            Log($"EnemyIdentifier value non-null, value: {eid}");
+        }
+    }
+
+    public static void Log(string text)
+    {
+        if (DEBUG_MODE)
+        {
+            Plugin.Logger.LogInfo(text);
         }
     }
 }

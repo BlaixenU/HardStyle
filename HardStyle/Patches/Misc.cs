@@ -30,6 +30,15 @@ public static class MiscPatches
         return codeMatcher.InstructionEnumeration();
     } */
 
+    [HarmonyPostfix, HarmonyPatch(typeof(LeaderboardController), nameof(LeaderboardController.CanSubmitScores), MethodType.Getter)]
+    private static void ScoresSubmission(ref bool __result)
+    {
+        // prevent scores from being submitted since this mod is technically a cheat
+        __result = false;
+        // remove if using for a level plugin
+        // thanks 10 days till xmas
+    }
+
     [HarmonyPrefix, HarmonyPatch(typeof(SpiderBody), nameof(SpiderBody.GetHurt))]
     private static bool MalfaceFix(ref SpiderBody __instance,
                                    ref GameObject target,

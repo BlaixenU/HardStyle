@@ -9,6 +9,7 @@ namespace HardStyle.Patches;
 public static class HealingPatches
 {
     private static float healStep = 0.2f / 6;
+    
     private static List<float> healMultipliers = [
                                                     0.1f, // DESTRUCTIVE
                                                     0.1f + healStep,
@@ -22,26 +23,22 @@ public static class HealingPatches
 
     private static float HealFactor => healMultipliers[StyleHUD.Instance.rankIndex];
     
-    [HarmonyPrefix, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.GetHealth))]
+    /* [HarmonyPrefix, HarmonyPatch(typeof(NewMovement), nameof(NewMovement.GetHealth))] dont uncomment this brah.
     private static void GetHealthPatch(ref int health)
+    {
+        StyleHUD styleHud = StyleHUD.Instance;
+        var currentHealMultiplier = healMultipliers[styleHud.rankIndex];
+        var finalHealth = Mathf.RoundToInt(health * currentHealMultiplier);
+        if (Debug.DEBUG_MODE)
         {
-
-            StyleHUD styleHud = StyleHUD.Instance;
-
-            var currentHealMultiplier = healMultipliers[styleHud.rankIndex];
-            var finalHealth = Mathf.RoundToInt(health * currentHealMultiplier);
-
-            if (Debug.DEBUG_MODE)
-            {
-                Plugin.Logger.LogInfo($"* GetHealth() called!");
-                Plugin.Logger.LogInfo($"    Input {health}  output {finalHealth}");
-                Plugin.Logger.LogInfo($"    Rank index {styleHud.rankIndex}  Multiplier {currentHealMultiplier}");
-                Plugin.Logger.LogInfo("\n");
-                return;
-            }
-
-            health = finalHealth;
+            Plugin.Logger.LogInfo($"* GetHealth() called!");
+            Plugin.Logger.LogInfo($"    Input {health}  output {finalHealth}");
+            Plugin.Logger.LogInfo($"    Rank index {styleHud.rankIndex}  Multiplier {currentHealMultiplier}");
+            Plugin.Logger.LogInfo("\n");
+            return;
         }
+        health = finalHealth;
+    } */
 
     /* [HarmonyPrefix, HarmonyPatch(typeof(BloodsplatterManager), nameof(BloodsplatterManager.PrepareGore))]
     private static bool ThisShouldBeATranspilerButIsnt(ref GameObject gob, ref int healthChange, ref EnemyIdentifier eid, ref bool fromExplosion)
@@ -95,25 +92,23 @@ public static class HealingPatches
 
         UnityEngine.Object? obj = UnityEngine.Object.FindObjectFromInstanceID(__instance.eidID);
 
-        if (Debug.DEBUG_MODE)
+        if (obj == null)
         {
-            if (obj == null)
+            if (obj is null)
             {
-                if (obj is null)
-                {
-                    Plugin.Logger.LogInfo("Bloodsplatter.eid is null.");
-                }
-                else
-                {
-                    Plugin.Logger.LogInfo("Bloodsplatter.eid is destroyed.");
-                }
-                return;
+                Debug.Log("Bloodsplatter.eid is null.");
             }
             else
-            {  
-                Plugin.Logger.LogInfo($"Bloodsplatter.eid object name: {obj.name}");
+            {
+                Debug.Log("Bloodsplatter.eid is destroyed.");
             }
+            return;
         }
+        else
+        {  
+            Debug.Log($"Bloodsplatter.eid object name: {obj.name}");
+        }
+        
         
 
         // HEALING CONDITIONS
@@ -130,10 +125,8 @@ public static class HealingPatches
                 break;
         }
         
-        if (Debug.DEBUG_MODE) 
-        {
-            Plugin.Logger.LogInfo($"Enemy hit, EnemyIdentifier found ({targetEid}), emit blood for {__instance.hpAmount} HP");
-        }
+        Debug.Log($"Enemy hit, EnemyIdentifier found ({targetEid}), emit blood for {__instance.hpAmount} HP");
+
     }
     
     

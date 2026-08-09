@@ -5,7 +5,7 @@
     <AssemblyName>HardStyle</AssemblyName>
     <Product>HardStyle</Product>
     <GUID>com.blaixenu.hardstyle</GUID>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Nullable>enable</Nullable>
     <LangVersion>13.0</LangVersion>
     <RootNamespace>HardStyle</RootNamespace>
@@ -44,6 +44,11 @@
     </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>$(UltrakillDir)ULTRAKILL_Data/Managed/Unity.Addressables.dll</HintPath>
+      <Private>false</Private>
+      <CopyLocal>false</CopyLocal>
+    </Reference>
+    <Reference Include="PluginConfigurator">
+      <HintPath>$(UltrakillDir)BepInEx/plugins/PluginConfigurator/PluginConfigurator.dll"</HintPath>
       <Private>false</Private>
       <CopyLocal>false</CopyLocal>
     </Reference>
